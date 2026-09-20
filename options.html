@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Snippet Dashboard - Sugan Snippet Expander</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<div class="app">
+
+  <header class="topbar glass">
+    <div class="brand">
+      <div class="brand-badge">/</div>
+      <span class="brand-name">Snippet<span class="accent">Expander</span></span>
+    </div>
+
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input id="searchInput" type="text" placeholder="Search shortcuts, content, or tags...">
+    </div>
+
+    <div class="signature-wrap" title="Whatever you type here fills in any snippet that contains {signature}">
+      <span class="signature-label">Signature</span>
+      <input id="signatureInput" type="text" placeholder="Your name" autocomplete="off">
+    </div>
+
+    <div class="topbar-actions">
+      <input id="importFile" type="file" accept="application/json" hidden>
+      <button id="importBtn" class="btn ghost" type="button">Import</button>
+      <button id="exportBtn" class="btn ghost" type="button">Export</button>
+      <button id="newSnippetBtn" class="btn primary" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New Snippet
+      </button>
+    </div>
+  </header>
+
+  <div class="tagbar" id="tagBar"></div>
+
+  <main>
+    <div class="stats-row" id="countLabel">0 snippets</div>
+
+    <div id="grid" class="grid"></div>
+
+    <div id="emptyState" class="empty-state glass" hidden>
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="34" height="34"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+      </div>
+      <h3 id="emptyTitle">No snippets yet</h3>
+      <p id="emptyText">Create your first shortcut and it'll expand anywhere you type.</p>
+      <button class="btn primary" id="emptyAddBtn" type="button">+ New Snippet</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <button id="resetDefaultsBtn" class="link-btn" type="button">Reset to default snippets</button>
+    <span class="footer-hint">Stored locally in this browser profile - use Export to back up or move to another computer.</span>
+  </footer>
+
+</div>
+
+<!-- Snippet editor modal -->
+<div id="modalOverlay" class="modal-overlay" hidden>
+  <div class="modal glass">
+    <div class="modal-header">
+      <h2 id="modalTitle">New Snippet</h2>
+      <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <label class="field">
+      <span>Shortcut</span>
+      <input id="shortcutInput" type="text" placeholder="e.g. update/" autocomplete="off">
+      <small>Must end with <code>/</code> - that's what triggers the expansion. We'll add it for you if you forget.</small>
+    </label>
+
+    <label class="field">
+      <span>Tag <em>(optional)</em></span>
+      <input id="tagInput" type="text" placeholder="e.g. Closing" list="tagOptions" autocomplete="off">
+      <datalist id="tagOptions"></datalist>
+    </label>
+
+    <label class="field">
+      <span>Expansion text</span>
+      <textarea id="contentInput" rows="8" placeholder="Hi Team,&#10;&#10;Any update?&#10;&#10;-{signature}"></textarea>
+      <small>Use <code>{signature}</code> anywhere you want your name (set top-right) inserted - so this snippet stays correct for whoever's using it.</small>
+    </label>
+
+    <div class="modal-footer">
+      <button class="btn danger" id="deleteBtn" type="button" hidden>Delete</button>
+      <div class="spacer"></div>
+      <button class="btn ghost" id="cancelBtn" type="button">Cancel</button>
+      <button class="btn primary" id="saveBtn" type="button">Save Snippet</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal -->
+<div id="confirmOverlay" class="modal-overlay" hidden>
+  <div class="modal glass confirm-modal">
+    <h2 id="confirmTitle">Are you sure?</h2>
+    <p id="confirmBody"></p>
+    <div class="modal-footer">
+      <div class="spacer"></div>
+      <button class="btn ghost" id="confirmCancelBtn" type="button">Cancel</button>
+      <button class="btn danger" id="confirmOkBtn" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="defaults.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
